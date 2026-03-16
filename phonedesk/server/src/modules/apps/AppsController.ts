@@ -32,7 +32,7 @@ export class AppsController {
 
   private async getApps(_request: Request, response: Response, next: NextFunction): Promise<void> {
     try {
-      const apps = await this.appsService.getApps();
+      const apps = await this.appsService.getAppsForClient();
       response.status(200).json(apps);
     } catch (error) {
       next(error);

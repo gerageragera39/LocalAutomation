@@ -9,7 +9,28 @@ interface AppIconProps {
 }
 
 const hasImageIcon = (icon: string): boolean => {
-  return icon.startsWith("data:image") || icon.startsWith("http://") || icon.startsWith("https://") || icon.startsWith("/");
+  if (icon.startsWith("data:image")) {
+    return true;
+  }
+
+  if (icon.startsWith("http://") || icon.startsWith("https://")) {
+    return true;
+  }
+
+  if (!icon.startsWith("/")) {
+    return false;
+  }
+
+  const lower = icon.toLowerCase();
+  const isFilesystemPath =
+    lower.startsWith("/usr/") ||
+    lower.startsWith("/home/") ||
+    lower.startsWith("/opt/") ||
+    lower.startsWith("/var/") ||
+    lower.startsWith("/snap/") ||
+    lower.startsWith("/etc/");
+
+  return !isFilesystemPath;
 };
 
 export const AppIcon = ({ app, isRunning, disabled = false, onPress }: AppIconProps) => {
