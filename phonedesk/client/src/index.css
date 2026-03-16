@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  font-family: "Segoe UI", "SF Pro Text", "Helvetica Neue", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+  width: 100%;
+}
+
+body {
+  background:
+    radial-gradient(circle at 15% 10%, rgba(18, 196, 139, 0.22), transparent 25%),
+    radial-gradient(circle at 80% 5%, rgba(43, 116, 255, 0.16), transparent 35%),
+    #0f1720;
+  color: #eef5ff;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+input,
+select {
+  outline: none;
+}
+
+input:focus,
+select:focus,
+button:focus-visible {
+  box-shadow: 0 0 0 2px rgba(18, 196, 139, 0.5);
+}
