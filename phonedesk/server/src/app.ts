@@ -18,6 +18,10 @@ import { LauncherController } from "./modules/launcher/LauncherController";
 import { LauncherService } from "./modules/launcher/LauncherService";
 import { LinuxLauncher } from "./modules/launcher/platform/LinuxLauncher";
 import { WindowsLauncher } from "./modules/launcher/platform/WindowsLauncher";
+import { MouseController } from "./modules/mouse/MouseController";
+import { MouseService } from "./modules/mouse/MouseService";
+import { LinuxMouseStrategy } from "./modules/mouse/LinuxMouseStrategy";
+import { WindowsMouseStrategy } from "./modules/mouse/WindowsMouseStrategy";
 import { errorHandler, notFoundHandler } from "./shared/middleware/ErrorHandler";
 import { ipWhitelist } from "./shared/middleware/IpWhitelist";
 import { apiRateLimiter, noStoreApiCache } from "./shared/middleware/RateLimiter";
@@ -85,10 +89,14 @@ const bootstrap = async (): Promise<void> => {
       : new LinuxLauncher(processMap, logger);
 
   const launcherService = new LauncherService(launcherStrategy, appsService, logger, processMap);
+  const mouseStrategy =
+    appConfig.platform === "windows" ? new WindowsMouseStrategy() : new LinuxMouseStrategy(logger);
+  const mouseService = new MouseService(mouseStrategy, logger);
 
   const authController = new AuthController(authService);
   const appsController = new AppsController(appsService);
   const launcherController = new LauncherController(appsService, launcherService);
+  const mouseController = new MouseController(mouseService);
   const authMiddleware = new AuthMiddleware(authService);
 
   const app = express();
@@ -122,11 +130,20 @@ const bootstrap = async (): Promise<void> => {
   app.use(cors(corsOptions));
   app.use(express.json({ limit: "256kb" }));
 
-  app.use("/api", noStoreApiCache, apiRateLimiter);
+  app.use("/api", noStoreApiCache);
+  app.use("/api", (request: Request, response: Response, next: NextFunction) => {
+    if (request.path.startsWith("/mouse")) {
+      next();
+      return;
+    }
+
+    apiRateLimiter(request, response, next);
+  });
 
   app.use("/api/auth", authController.createRouter(authMiddleware.requireAuth, ipWhitelist));
   app.use("/api/apps", authMiddleware.requireAuth, appsController.createUserRouter());
   app.use("/api/apps", authMiddleware.requireAuth, launcherController.createRouter());
+  app.use("/api/mouse", authMiddleware.requireAuth, mouseController.createRouter());
   app.use("/api/admin/apps", ipWhitelist, authMiddleware.requireAuth, appsController.createAdminRouter());
 
   app.use(

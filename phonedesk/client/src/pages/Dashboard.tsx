@@ -114,6 +114,9 @@ export const Dashboard = () => {
           {mustChangePin && <p className="text-sm text-yellow-300">Смените PIN в разделе Admin.</p>}
         </div>
         <div className="flex items-center gap-2">
+          <Link to="/mouse" className="rounded-lg border border-white/20 px-3 py-2 text-sm hover:bg-white/10">
+            Мышь
+          </Link>
           <Link to="/admin" className="rounded-lg border border-white/20 px-3 py-2 text-sm hover:bg-white/10">
             Admin
           </Link>

@@ -8,6 +8,12 @@ export const api = axios.create({
   timeout: 15_000,
 });
 
+export const mouseApi = {
+  move: (dx: number, dy: number) => api.post("/mouse/move", { dx, dy }),
+  click: (button: "left" | "right") => api.post("/mouse/click", { button }),
+  scroll: (dy: number) => api.post("/mouse/scroll", { dy }),
+};
+
 api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const token = useAuthStore.getState().token;
 

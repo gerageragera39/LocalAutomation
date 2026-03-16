@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Admin } from "./pages/Admin";
 import { Dashboard } from "./pages/Dashboard";
+import { MousePad } from "./pages/MousePad";
 import { PinScreen } from "./pages/PinScreen";
 import { api } from "./services/api";
 import { useAuthStore } from "./stores/authStore";
@@ -58,6 +59,14 @@ export const App = () => {
         element={
           <ProtectedRoute>
             <Admin />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/mouse"
+        element={
+          <ProtectedRoute>
+            <MousePad />
           </ProtectedRoute>
         }
       />
