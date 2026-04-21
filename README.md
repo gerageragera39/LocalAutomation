@@ -254,17 +254,6 @@ npm run dev
 
 ---
 
-## ⚠️ Important: data/ folder
-
-**Do not commit the `data/` directory.** It contains runtime state including:
-- Hashed PIN & JWT secret
-- Your personal app catalog
-- Audit logs
-
-Only `data/.gitkeep` should be tracked. This is already handled by `.gitignore`.
-
----
-
 <div align="center">
 
 Made with ❤️ · [Report a bug](https://github.com/gerageragera39/LocalAutomation/issues) · [Request a feature](https://github.com/gerageragera39/LocalAutomation/issues)
